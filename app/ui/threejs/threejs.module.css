@@ -1,0 +1,78 @@
+.container {
+  width: 100%;
+  outline: none;
+  background-image: linear-gradient(#331507, rgb(225, 225, 225));
+}
+.wrap {
+  position: relative;
+}
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(255, 255, 255);
+}
+.progressBarContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #f3f3f3;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.progressBar {
+  position: absolute;
+  top: 0;
+  width: 0%;
+  height: 217px;
+  background: linear-gradient(270deg, #cabcb5, #331507);
+  background-size: 200% 200%;
+  animation: gradient 5s ease-in-out infinite;
+}
+.loadingWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 431px;
+  height: 217px;
+}
+.loadingBg {
+  position: absolute;
+  top: 0;
+  width: 431px;
+  height: 217px;
+  z-index: 1;
+}
+.loadingText {
+  position: absolute;
+  font-size: 30px;
+  bottom: -50px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: #7c655b;
+  font-family: 'Times New Roman', Times, serif;
+  cursor: pointer;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
