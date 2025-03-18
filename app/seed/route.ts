@@ -1,8 +1,9 @@
-import bcrypt from 'bcrypt';
-import postgres from 'postgres';
+import bcrypt from 'bcryptjs';
+import { neon } from '@neondatabase/serverless';
+import { put } from '@vercel/blob';
 import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const sql = neon(process.env.POSTGRES_URL!);
 
 async function seedUsers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -101,13 +102,21 @@ async function seedRevenue() {
   return insertedRevenue;
 }
 
+async function createBlob() {
+  const { url } = await put('articles/blob.txt', 'Hello World!', {
+    access: 'public',
+  });
+  console.log('result', url);
+}
+
 export async function GET() {
   try {
-    const result = await sql.begin((sql) => [
+    const result = await Promise.all([
       seedUsers(),
       seedCustomers(),
       seedInvoices(),
       seedRevenue(),
+      createBlob(),
     ]);
 
     return Response.json({ message: 'Database seeded successfully' });

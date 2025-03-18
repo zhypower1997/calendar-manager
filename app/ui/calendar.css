@@ -1,0 +1,22 @@
+.fc-day-fri,
+.fc-day-thu,
+.fc-day-wed,
+.fc-day-tue,
+.fc-day-mon {
+  background: rgb(255, 255, 255);
+}
+.fc-day-sat,
+.fc-day-sun {
+  background: rgb(246, 246, 246);
+}
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: rgb(255, 228, 241);
+}
+a {
+  color: rgb(114, 114, 114) !important;
+  text-decoration: none;
+  cursor: none;
+}
+.fc .fc-col-header-cell-cushion {
+  color: #333 !important;
+}
