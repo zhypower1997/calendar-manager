@@ -20,3 +20,25 @@ a {
 .fc .fc-col-header-cell-cushion {
   color: #333 !important;
 }
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+  border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+  border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+button.fc-today-button.fc-button.fc-button-primary {
+  border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;
+}
+
+.fc-header-toolbar.fc-toolbar {
+  justify-content: flex-end;
+}
+.fc-toolbar-title {
+  font-weight: 500;
+  margin-right: 12px !important;
+}

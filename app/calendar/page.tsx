@@ -23,7 +23,9 @@ const createEventId = () => {
 };
 
 export default observer(function IndexPage() {
-  const { sheetToken, setSheetToken } = feishuStore;
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isClient, setIsClient] = useState(false)
+  const { sheetToken } = feishuStore;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [color, setColor] = useState('#E6EEFF');
   const [clickInfoItem, setClickInfoItem] = useState<EventContentArg>();
@@ -32,6 +34,12 @@ export default observer(function IndexPage() {
   const [value, setValue] = useState('');
   const [isChange, setIsChange] = useState(false);
   const [initEvent, setInitEvent] = useState([]);
+
+  useEffect(() => {
+    setIsClient(true);
+    // 初始化时获取 token
+    feishuStore.initializeToken();
+  }, []);
 
   useEffect(() => {
     if (!sheetToken) return;
@@ -47,7 +55,8 @@ export default observer(function IndexPage() {
         }
       } catch (error) {
         console.error('获取数据失败:', error);
-        message.error('获取数据失败');
+        setInitEvent([])
+        messageApi.error('获取数据失败');
       }
     };
 
@@ -116,7 +125,7 @@ export default observer(function IndexPage() {
             eventInfo.event.remove();
           }}
         >
-          <CloseCircleOutlined style={{ fontSize: 16, color: '#fff' }} />
+          <CloseCircleOutlined style={{ fontSize: 12, color: '#fff' }} />
         </span>
       </div>
     );
@@ -149,31 +158,42 @@ export default observer(function IndexPage() {
       });
     } catch (error) {
       console.error('保存数据失败:', error);
-      message.error('保存数据失败');
+      messageApi.error('保存数据失败');
     }
   };
+
+  const updateUrlQuery = (token: string) => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('sheetToken', token);
+      window.history.pushState({}, '', url);
+    }
+  };
+
   return (
     <>
+    {contextHolder}
       <div className={styles.tokenWrap}>
         <Input
           className={styles.tokenInput}
-          value={feishuStore.inputSheetToken || feishuStore.sheetToken}
+          value={feishuStore.inputSheetToken}
           onChange={(e: any) => {
-            console.log('e', e.target.value);
             feishuStore.setInputSheetToken(e.target.value);
           }}
         />
         <div
           className={styles.tokenBtn}
           onClick={() => {
-            feishuStore.setSheetToken(feishuStore.inputSheetToken);
+            const newToken = feishuStore.inputSheetToken;
+            feishuStore.setSheetToken(newToken);
+            updateUrlQuery(newToken);
           }}
         >
-          确定
+          确定拉取文档
         </div>
       </div>
-
-      <div className={styles.dateWrap}>
+      {/* 仅在客户端渲染 */}
+      {isClient && <div className={styles.dateWrap}>
         <div className={styles.fullCalendar}>
           <FullCalendar
             locale={locale}
@@ -214,7 +234,7 @@ export default observer(function IndexPage() {
           }}
           onOk={() => {
             if (value === '') {
-              message.info('请输入内容');
+              messageApi.info('请输入内容');
               return;
             }
             setIsModalOpen(false);
@@ -262,7 +282,7 @@ export default observer(function IndexPage() {
             />
           </div>
         </Modal>
-      </div>
+      </div>}
     </>
   );
 });
