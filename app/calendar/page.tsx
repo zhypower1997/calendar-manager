@@ -37,12 +37,9 @@ export default observer(function IndexPage() {
 
   useEffect(() => {
     setIsClient(true);
-    // 初始化时获取 token
-    feishuStore.initializeToken();
   }, []);
 
   useEffect(() => {
-    if (!sheetToken) return;
     // 页面加载时从飞书获取数据
     const fetchEvents = async () => {
       try {
@@ -61,7 +58,7 @@ export default observer(function IndexPage() {
     };
 
     fetchEvents();
-  }, [sheetToken]);
+  }, []);
 
   const handleDateSelect = (selectInfo: any) => {
     setValue('');
@@ -162,36 +159,9 @@ export default observer(function IndexPage() {
     }
   };
 
-  const updateUrlQuery = (token: string) => {
-    if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('sheetToken', token);
-      window.history.pushState({}, '', url);
-    }
-  };
-
   return (
     <>
-    {contextHolder}
-      <div className={styles.tokenWrap}>
-        <Input
-          className={styles.tokenInput}
-          value={feishuStore.inputSheetToken}
-          onChange={(e: any) => {
-            feishuStore.setInputSheetToken(e.target.value);
-          }}
-        />
-        <div
-          className={styles.tokenBtn}
-          onClick={() => {
-            const newToken = feishuStore.inputSheetToken;
-            feishuStore.setSheetToken(newToken);
-            updateUrlQuery(newToken);
-          }}
-        >
-          确定拉取文档
-        </div>
-      </div>
+      {contextHolder}
       {/* 仅在客户端渲染 */}
       {isClient && <div className={styles.dateWrap}>
         <div className={styles.fullCalendar}>
