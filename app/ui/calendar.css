@@ -11,6 +11,7 @@
 }
 .fc .fc-daygrid-day.fc-day-today {
   background-color: rgb(255, 228, 241);
+  border-radius: 6px;
 }
 a {
   color: rgb(114, 114, 114) !important;
@@ -41,4 +42,28 @@ button.fc-today-button.fc-button.fc-button-primary {
 .fc-toolbar-title {
   font-weight: 500;
   margin-right: 12px !important;
+}
+.fc .fc-button-primary {
+  background-color: rgb(47 111 235);
+  border-color: rgb(47 111 235);
+}
+.fc .fc-button-primary:disabled {
+  background-color: #3ac8e3;
+  border-color: #3ac8e3;
+  font-weight: 500;
+}
+.fc .fc-daygrid-day-frame {
+  border: none !important;
+}
+.fc-scroller table,
+th,
+td {
+  border: none;
+}
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border: none !important;
+}
+.fc-theme-standard .fc-scrollgrid {
+  border: none !important;
 }
