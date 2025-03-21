@@ -14,8 +14,8 @@ import FullCalendar, {
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import styles from "@/app/ui/calendar.module.css";
-import "@/app/ui/calendar.css";
+import styles from "@/app/ui/dashboard/calendar.module.css";
+import "@/app/ui/dashboard/calendar.css";
 import feishuStore from "@/app/store/feishu";
 const createEventId = () => {
   return uuidv4();
