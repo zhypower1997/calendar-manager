@@ -16,7 +16,7 @@
 a {
   color: rgb(114, 114, 114) !important;
   text-decoration: none;
-  cursor: none;
+  /* cursor: none; */
 }
 .fc .fc-col-header-cell-cushion {
   color: #333 !important;
@@ -47,10 +47,24 @@ button.fc-today-button.fc-button.fc-button-primary {
   background-color: rgb(47 111 235);
   border-color: rgb(47 111 235);
 }
+.fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #90b6ff;
+  border-color: #90b6ff;
+}
 .fc .fc-button-primary:disabled {
-  background-color: #3ac8e3;
-  border-color: #3ac8e3;
+  background-color: #90b6ff;
+  border-color: #90b6ff;
   font-weight: 500;
+}
+.fc .fc-button-primary:hover {
+  background-color: #90b6ff;
+  border-color: #90b6ff;
+}
+.fc .fc-button-primary:focus {
+  box-shadow: none;
+}
+.fc .fc-button-primary:not(:disabled):active:focus, .fc .fc-button-primary:not(:disabled).fc-button-active:focus {
+  box-shadow: 0 0 0 .2rem #bddeff80;
 }
 .fc .fc-daygrid-day-frame {
   border: none !important;
