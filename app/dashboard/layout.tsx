@@ -4,6 +4,7 @@ import {
   ChartBarIcon,
   NewspaperIcon,
   PencilSquareIcon,
+  Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,6 +14,7 @@ const links = [
   { name: '', href: '/dashboard/calendar', icon: PencilSquareIcon },
   { name: '', href: '/dashboard/databoard', icon: ChartBarIcon },
   { name: '', href: '/dashboard/report', icon: NewspaperIcon },
+  { name: '', href: '/dashboard/setting', icon: Cog6ToothIcon },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -40,7 +42,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     key={link.name}
                     href={link.href}
                     className={clsx(
-                      'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-center md:p-2 md:px-3',
+                      'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-center md:pr-2 md:px-3',
                       {
                         'bg-sky-100 text-blue-600': pathname === link.href,
                       },
