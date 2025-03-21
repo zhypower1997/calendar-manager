@@ -2,9 +2,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { Input, Modal, message } from "antd";
+import { Input, Modal, message, Spin } from "antd";
 import { v4 as uuidv4 } from "uuid";
-import dayjs from "dayjs";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { SketchPicker as ColorPicker } from "react-color";
 import locale from "@fullcalendar/core/locales/zh-cn";
@@ -25,39 +24,22 @@ const createEventId = () => {
 export default observer(function IndexPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const [isClient, setIsClient] = useState(false);
-  const { sheetToken } = feishuStore;
+  const { calendarDataLoading, events } = feishuStore;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [color, setColor] = useState("#E6EEFF");
   const [clickInfoItem, setClickInfoItem] = useState<EventContentArg>();
   const [selectItemInfo, setSelectItemInfo] = useState<DateSelectArg>();
-
   const [value, setValue] = useState("");
   const [isChange, setIsChange] = useState(false);
-  const [initEvent, setInitEvent] = useState([]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    // 页面加载时从飞书获取数据
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch(
-          `/apis/get-feishu-excel?sheetToken=${sheetToken}`
-        );
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          setInitEvent(data);
-        }
-      } catch (error) {
-        console.error("获取数据失败:", error);
-        setInitEvent([]);
-        messageApi.error("获取数据失败");
-      }
-    };
-
-    fetchEvents();
+    feishuStore.fetchEvents().catch(() => {
+      messageApi.error("获取数据失败");
+    });
   }, []);
 
   const handleDateSelect = (selectInfo: any) => {
@@ -134,35 +116,15 @@ export default observer(function IndexPage() {
     }
 
     try {
-      await fetch(`/apis/save-feishu-excel?sheetToken=${sheetToken}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          valueRange: {
-            range: "sheetId!A2:T2000", // 根据实际表格范围调整
-            values: events.map((event: any) => [
-              event.title,
-              dayjs(event.start).format("YYYY-MM-DD"),
-              dayjs(event.end).format("YYYY-MM-DD"),
-              event.id,
-              event.backgroundColor,
-              String(event.extendedProps?.done),
-            ]),
-          },
-        }),
-      });
+      await feishuStore.saveEvents(events);
     } catch (error) {
-      console.error("保存数据失败:", error);
       messageApi.error("保存数据失败");
     }
   };
 
   return (
-    <>
+    <Spin spinning={calendarDataLoading} style={{maxHeight: "100vh"}}>
       {contextHolder}
-      {/* 仅在客户端渲染 */}
       {isClient && (
         <div className={styles.dateWrap}>
           <div className={styles.fullCalendar}>
@@ -190,7 +152,7 @@ export default observer(function IndexPage() {
               selectMirror
               dayMaxEvents
               weekends
-              events={initEvent}
+              events={events}
               select={handleDateSelect}
               eventContent={renderEventContent}
               eventsSet={handleEvents}
@@ -255,6 +217,6 @@ export default observer(function IndexPage() {
           </Modal>
         </div>
       )}
-    </>
+    </Spin>
   );
 });
