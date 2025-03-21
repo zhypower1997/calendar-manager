@@ -36,7 +36,6 @@ class FeishuStore {
     }
 
     async saveEvents(events: any[]) {
-        this.setCalendarDataLoading(true);
         try {
             await axios.put(`/apis/save-feishu-excel?sheetToken=${this.sheetToken}`, {
                 valueRange: {
@@ -54,8 +53,6 @@ class FeishuStore {
         } catch (error) {
             console.error("保存数据失败:", error);
             throw error;
-        } finally {
-            this.setCalendarDataLoading(false);
         }
     }
 }
