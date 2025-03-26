@@ -31,15 +31,21 @@ export default observer(function IndexPage() {
   const [selectItemInfo, setSelectItemInfo] = useState<DateSelectArg>();
   const [value, setValue] = useState("");
   const [isChange, setIsChange] = useState(false);
+  const userId = 'ss2';
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    feishuStore.fetchEvents().catch(() => {
+    feishuStore.fetchSheetId(userId).then(()=>{
+      feishuStore.fetchEvents().catch(() => {
+        messageApi.error("获取数据失败");
+      });
+    }).catch(() => {
       messageApi.error("获取数据失败");
     });
+
   }, []);
 
   const handleDateSelect = (selectInfo: any) => {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getFeiShuToken, getFeiShuTableInfo } from '@/app/utils/feishu'
+import { getFeiShuToken, getFeiShuSheetInfoBySheetId } from '@/app/utils/feishu'
 
 interface ValueRange {
   range: string
@@ -11,10 +11,12 @@ interface RequestBody {
 
 export async function PUT(request: Request) {
   try {
-    const sheetToken = request.url.split('?')[1].split('=')[1]
+    const { searchParams } = new URL(request.url);
+    const sheetToken = searchParams.get('sheetToken');
+    const sheetId = searchParams.get('sheetId');
     const body: RequestBody = await request.json()
     const token = await getFeiShuToken()
-    const { row, sheetId } = await getFeiShuTableInfo(sheetToken)
+    const { row, sheetId: sheetId2 } = await getFeiShuSheetInfoBySheetId(sheetToken, sheetId)
     const response = await fetch(
       `https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${sheetToken}/values`,
       {
@@ -24,14 +26,14 @@ export async function PUT(request: Request) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          valueRange: { ...body.valueRange, range: `${sheetId}!A2:T2000` }
+          valueRange: { ...body.valueRange, range: `${sheetId2}!A2:T2000` }
         }),
       }
     )
     const data = await response.json()
     // 删除行列接口
     const deleteUrl = `https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${sheetToken}/dimension_range`
-    const deleteResponse = await fetch(deleteUrl, {
+    await fetch(deleteUrl, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -46,7 +48,6 @@ export async function PUT(request: Request) {
         }
       })
     })
-    const deleteData = await deleteResponse.json()
     return NextResponse.json(data)
   } catch (error) {
     console.error('Error updating spreadsheet:', error)
