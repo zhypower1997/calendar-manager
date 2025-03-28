@@ -141,13 +141,13 @@ export async function getFeiShuSheetData(sheetToken: string, range: string) {
 
 
 // 插入用户信息表
-export async function insertSheetData(sheetToken: string, userId: string, insertSheetId: string, sheetId: string, sheetName: string) {
+export async function insertSheetData({sheetToken, userId, insertSheetId, sheetId, sheetName, nickname, password, userName}: {sheetToken: string, userId: string, insertSheetId: string, sheetId: string, sheetName: string, nickname?: string, password?: string, userName?: string}) {
   const insertUrl = `https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${sheetToken}/values_prepend`;
   const token = await getFeiShuToken();
   await axios.post(insertUrl,{
     valueRange: {
       range: `${insertSheetId}!A2:E2`,
-      values: [[sheetName, userId, '', '', sheetId]],
+      values: [[userName, userId, nickname, password, sheetId]],
     },
   }, {
     headers: {

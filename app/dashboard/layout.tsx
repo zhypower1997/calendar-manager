@@ -6,6 +6,7 @@ import {
   PencilSquareIcon,
   Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -19,7 +20,11 @@ const links = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
+  const router = useRouter();
+  const logout = () => {
+    localStorage.removeItem('calendar-user');
+    router.push('/user/register');
+  }
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="w-full flex-none md:w-24">
@@ -56,7 +61,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </>
             <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
             <form>
-              <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-center md:p-2 md:px-3">
+              <button onClick={logout} className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-center md:p-2 md:px-3">
                 <PowerIcon className="w-6" />
               </button>
             </form>

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Input, Modal, message, Spin } from "antd";
 import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { SketchPicker as ColorPicker } from "react-color";
 import locale from "@fullcalendar/core/locales/zh-cn";
@@ -22,6 +23,7 @@ const createEventId = () => {
 };
 
 export default observer(function IndexPage() {
+  const router = useRouter();
   const [messageApi, contextHolder] = message.useMessage();
   const [isClient, setIsClient] = useState(false);
   const { calendarDataLoading, events } = feishuStore;
@@ -31,13 +33,21 @@ export default observer(function IndexPage() {
   const [selectItemInfo, setSelectItemInfo] = useState<DateSelectArg>();
   const [value, setValue] = useState("");
   const [isChange, setIsChange] = useState(false);
-  const userId = 'ss2';
+  // 从localStorage获取用户信息,如果获取失败则跳转至登录页
+  // 判断是否window
+  const user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('calendar-user') || '{}') : null;
+  const userId = user?.userId;
+  if (!userId) {
+    router.push('/user/login');
+  }
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
+    if (!userId) return
+
     feishuStore.fetchSheetId(userId).then(()=>{
       feishuStore.fetchEvents().catch(() => {
         messageApi.error("获取数据失败");

@@ -35,7 +35,7 @@ export async function GET(request: Request) {
       // 如果userSheetId不存在，则创建
       userSheetId = await createFeiShuSheet(sheetToken, `用户${userId}的日历`);
       // 同时将用户信息插入用户信息表，如userId、sheetId
-      await insertSheetData(sheetToken, userId, '7v6VVy', userSheetId, `用户${userId}的日历`);
+      await insertSheetData({sheetToken, userId, insertSheetId: '7v6VVy', sheetId: userSheetId, sheetName: `用户${userId}的日历`, userName: userId});
     }
     return NextResponse.json({
       sheetId: userSheetId,
