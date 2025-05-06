@@ -26,13 +26,13 @@ class FeishuStore {
 
     async fetchSheetId(userId: string) {
         this.setCalendarDataLoading(true);
-        const response = await axios.get(`/apis/get-user-data?userId=${userId}`);
+        const response = await axios.get(`/portfolio/apis/get-user-data?userId=${userId}`);
         this.setSheetId(response.data.sheetId);
     }
 
     async fetchEvents() {
         try {
-            const response = await axios.get(`/apis/get-feishu-excel?sheetToken=${this.sheetToken}&sheetId=${this.sheetId}`);
+            const response = await axios.get(`/portfolio/apis/get-feishu-excel?sheetToken=${this.sheetToken}&sheetId=${this.sheetId}`);
             if (Array.isArray(response.data)) {
                 this.setEvents(response.data);
             }
@@ -47,7 +47,7 @@ class FeishuStore {
 
     async saveEvents(events: any[]) {
         try {
-            await axios.put(`/apis/save-feishu-excel?sheetToken=${this.sheetToken}&sheetId=${this.sheetId}`, {
+            await axios.put(`/portfolio/apis/save-feishu-excel?sheetToken=${this.sheetToken}&sheetId=${this.sheetId}`, {
                 valueRange: {
                     // range: "sheetId!A2:T2000",
                     range: `${this.sheetId}!A2:T2000`,

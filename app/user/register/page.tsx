@@ -33,7 +33,7 @@ export default function Page() {
     const uuid = uuidv4();
     // 调用注册接口
     try {
-      const res = await axios.post('/apis/user/register', { ...values, uuid });
+      const res = await axios.post('/portfolio/apis/user/register', { ...values, uuid });
       if (typeof window !== 'undefined') {
         // 将数据存入localStorage
         localStorage.setItem('calendar-user', JSON.stringify(res.data));

@@ -50,7 +50,7 @@ const ReportPage = observer(() => {
       ).join(' ');
 
       // 1. 发起对话
-      const chatResponse = await axios.post<ChatResponse>('/apis/coze-chat/start-chat', {
+      const chatResponse = await axios.post<ChatResponse>('/portfolio/apis/coze-chat/start-chat', {
         bot_id: "7493069877880995840",
         user_id: "123",
         stream: false,
@@ -77,7 +77,7 @@ const ReportPage = observer(() => {
       const maxRetries = 30; // 最多轮询30次
 
       while (!completed && retryCount < maxRetries) {
-        const statusResponse = await axios.get(`/apis/coze-chat/get-chat-detail`, {
+        const statusResponse = await axios.get(`/portfolio/apis/coze-chat/get-chat-detail`, {
           params: {
             conversation_id,
             chat_id: id
@@ -97,7 +97,7 @@ const ReportPage = observer(() => {
       }
 
       // 3. 获取对话消息列表
-      const messagesResponse = await axios.get<MessagesResponse>(`/apis/coze-chat/get-chat-messages`, {
+      const messagesResponse = await axios.get<MessagesResponse>(`/portfolio/apis/coze-chat/get-chat-messages`, {
         params: {
           conversation_id,
           chat_id: id

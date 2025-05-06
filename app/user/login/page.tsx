@@ -8,7 +8,7 @@ export default function Page() {
   const router = useRouter();
   const onFinish = async (values: any) => {
     try {
-      const res = await axios.post('/apis/user/login', values);
+      const res = await axios.post('/portfolio/apis/user/login', values);
       if (res.status === 200) {
         if (typeof window !== 'undefined') {
           localStorage.setItem('calendar-user', JSON.stringify(res.data));
