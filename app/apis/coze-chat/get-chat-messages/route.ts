@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
+import { COZE_TOKEN } from '../../../lib/constant';
+
 
 const COZE_API_URL = 'https://api.coze.cn/v3/chat/message/list';
-const COZE_AUTH_TOKEN = 'pat_7Lrqc2lsV9w6F96h31v78IDTu6mph5wWZtDXXxoImao22ruEbamItKbAwe7uHmf8';
+const COZE_AUTH_TOKEN = COZE_TOKEN;
 
 export async function GET(request: Request) {
   try {
